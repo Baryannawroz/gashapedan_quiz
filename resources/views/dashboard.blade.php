@@ -1,36 +1,40 @@
 <x-app-layout>
-  @if (Auth()->user()->type==1)
-  <a href="result">result</a>
-  <br>
-  <a href="create/quiz">create quiz</a>
-  <br>
-  <a href="/create/question">create quistion</a>
-  <br>
-  <a href="quizzes/check">quiz see</a>
-  <br>
 
+  @if (Auth()->user()->type==1)
+  
+  <div class="flex flex-col items-center">
+  <a href="/create/quiz"
+  class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
+  @lang('messages.create quiz')
+  </a>
+  
+  <a href="/create/question"
+  class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
+  @lang('messages.create question')
+</a>
+<a href="result"
+class="bg-yellow-400 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-yellow-500 transition-all duration-300">
+@lang('messages.result')
+</a>
+
+<a href="quizzes/check"
+  class="bg-yellow-400 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-yellow-500 transition-all duration-300">
+  @lang('messages.quiz information')
+</a>
+  </div>
 
   @else
-  <a href="quizzes ">quiz</a>
-  <br>
-  <a href="result/Self">self result</a>
-  <br>
+  <div class="flex flex-col items-center">
+    <a href="quizzes"
+      class="bg-yellow-400 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-yellow-500 transition-all duration-300">
+      @lang('messages.quizzes')
+    </a>
+
+    <a href="result/Self"
+      class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
+      @lang('messages.self result')
+    </a>
+  </div>
   @endif
-  <section class="text-gray-700 body-font">
-    <div class="p-4 md:w-1/3">
-      <div class="h-full border-2 border-gray-200 rounded-lg overflow-hidden">
-        <img class="lg:h-48 md:h-36 w-full object-cover object-center"
-          src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-          alt="blog">
-        <div class="p-6">
-          <h2 class="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">CATEGORY</h2>
-          <h1 class="title-font text-lg font-medium text-gray-900 mb-3">The Catalyzer</h1>
-          <p class="leading-relaxed mb-3">Photo booth fam kinfolk cold-pressed sriracha leggings jianbing microdosing
-            tousled waistcoat.</p>
-        
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+
 </x-app-layout>

@@ -846,6 +846,7 @@
             @endauth
         </div>
         @endif
+      
 
 {{ $slot }}
 

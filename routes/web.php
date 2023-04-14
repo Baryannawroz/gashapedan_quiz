@@ -5,6 +5,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResultController;
 use App\Models\Quiz;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +31,10 @@ Route::get('/quizzes', [QuizController::class, 'index']);
 Route::get('/quizzes/check', [QuizController::class, 'check']);
 Route::post('quizzes', [QuizController::class, 'store']);
 Route::get('/create/quiz', [QuizController::class, 'create']);
+Route::post('/quiz/{id}/deactivate', [QuizController::class, 'deactivate']);
+Route::post('/quiz/{id}/activate', [QuizController::class, 'activate']);
+
+
 Route::get("/create/question", [QuestionController::class, 'create']);
 Route::post("/question/store", [QuestionController::class, 'store'])->name('question.store');
 
@@ -53,5 +58,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('lang/{locale}', function ($locale) {
+
+
+    session(['locale' => $locale, 'expires' => now()->addDay()]);
+
+    
+    if(session()->has('locale')) {
+        $locale = session('locale');
+    } else {
+        $locale = 'en';
+        session()->put('locale', $locale);
+    }
+    App::setLocale($locale);
+
+    return redirect()->back();
+})->name('lang.switch');
+
 
 require __DIR__ . '/auth.php';

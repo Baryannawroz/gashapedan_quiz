@@ -15,10 +15,21 @@ class ResultController extends Controller
      */
     public function index()
     {
-        $results = QuizAttempt::latest('id')->paginate(10);
+        $results = QuizAttempt::latest('quiz_id')->orderByDesc('score')->paginate(30);
 
+    foreach ($results as $value) {
+        $rank=1;
+        foreach ($results as $othervalue) {
+            if ($value->quiz_id == $othervalue->quiz_id & $value->score<$othervalue->score ) {
+               $rank++;
+            }
+            $value->rank=$rank;
+        }
+    }
 
         return view('result.index_result', compact('results'));
+
+
     }
 
     /**
@@ -36,21 +47,39 @@ class ResultController extends Controller
                 $query->where('quizzes.title', 'LIKE', '%' . $searchQuery . '%')
                     ->orWhere('users.name', 'LIKE', '%' . $searchQuery . '%');
             })
-            ->paginate(10)->withQueryString();
+            ->paginate(30)->withQueryString();
+        foreach ($results as $value) {
+            $rank = 1;
+            foreach ($results as $othervalue) {
+                if ($value->quiz_id == $othervalue->quiz_id & $value->score < $othervalue->score) {
+                    $rank++;
+                }
+                $value->rank = $rank;
+            }
+        }
         return view('result.index_result', compact('results'));
     }
     public function showUser(Request $request)
     {
 
         $id = auth()->user()->id;
-        
+
 
         $results =  QuizAttempt::latest()->select('Quiz_attempts.*')
             ->join('quizzes', 'quizzes.id', '=', 'quiz_attempts.quiz_id')
             ->join('users', 'users.id', '=', 'quiz_attempts.user_id')
             ->where(function ($query) use ($id) {
                 $query->where('users.id', '=', "$id");
-            })->paginate(10);
+            })->paginate(30);
+        foreach ($results as $value) {
+            $rank = 1;
+            foreach ($results as $othervalue) {
+                if ($value->quiz_id == $othervalue->quiz_id & $value->score < $othervalue->score) {
+                    $rank++;
+                }
+                $value->rank = $rank;
+            }
+        }
         return view('result.index_result', compact('results'));
     }
 
