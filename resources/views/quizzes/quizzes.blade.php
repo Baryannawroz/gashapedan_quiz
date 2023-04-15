@@ -1,6 +1,6 @@
 
 <x-app-layout>
-    <div> quizze</div>
+    
 
   @foreach ($quiz as $item)
 <a class="relative flex items-start justify-between rounded-xl border border-gray-100 p-4 shadow-xl sm:p-6 lg:p-8"
@@ -23,12 +23,12 @@
         @if ($item->attempts_allowed == 0)
         <form method="POST" action="/quiz/{{ $item->id }}/activate">
             @csrf
-            <button class="text-green-400" type="submit">Activate Quiz</button>
+            <button class="text-green-400" type="submit">{{ __("messages.activate Quiz")}}</button>
         </form>
         @else
         <form method="POST" action="/quiz/{{ $item->id }}/deactivate">
             @csrf
-            <button class=" text-red-500" type="submit">Deactivate Quiz</button>
+            <button class=" text-red-500" type="submit">{{ __("messages.deactivate Quiz")}}</button>
         </form>
         @endif
     </div>

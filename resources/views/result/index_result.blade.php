@@ -43,11 +43,11 @@
                             class="border-b bg-white font-medium dark:border-neutral-500 dark:bg-neutral-600 min-w-full  ">
                             <tr class="">
                                 <th scope="col " class="px-6 py-4">id</th>
-                                <th scope="col" class="px-6 py-4">Studnet name</th>
-                                <th scope="col" class="px-6 py-4">quiz title</th>
-                                <th scope="col" class="px-6 py-4">score</th>
-                                <th scope="col" class="px-6 py-4">outof</th>
-                                <th scope="col" class="px-6 py-4">Rank</th>
+                                <th scope="col" class="px-6 py-4 ">@lang('messages.studnet name') </th>
+                                <th scope="col" class="px-6 py-4">@lang('messages.quiz title')</th>
+                                <th scope="col" class="px-6 py-4">@lang('messages.score')</th>
+                                <th scope="col" class="px-6 py-4">@lang('messages.outof')</th>
+                                <th scope="col" class="px-6 py-4">@lang('messages.rank')</th>
                             </tr>
                         </thead>
 
@@ -59,10 +59,10 @@
                             <tr class="border-b bg-neutral-100 dark:border-neutral-500 dark:bg-neutral-700">
                                 @endif
                                 <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $result->id }}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{ $result->user->name }}</td>
+                                <td class="whitespace-nowrap px-6 py-4 ">{{ $result->user->name }}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{ $result->quiz->title }}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{ $result->score }}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{ count($result->quiz->questions) }}</td>
+                                <td class="whitespace-nowrap px-16 py-4">{{ $result->score }}</td>
+                                <td class="whitespace-nowrap px-16 py-4">{{ count($result->quiz->questions) }}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{ $result->rank }}</td>
                             </tr>
 
