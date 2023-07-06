@@ -21,6 +21,7 @@ return [
     'login' => 'Log in',
     'Register' => 'Register',
     'Profile' => 'Profile',
+    'permition' => 'Permition',
 
     
 

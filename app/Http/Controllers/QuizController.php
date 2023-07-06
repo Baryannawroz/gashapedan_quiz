@@ -2,44 +2,85 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Answer;
-use App\Models\Question;
+use Attribute;
+use Carbon\Carbon;
 use App\Models\Quiz;
 
-use App\Models\QuizAttempt;
-use App\Models\StudentAnswer;
 use App\Models\User;
-use Attribute;
+use App\Models\Answer;
+use App\Models\Question;
+use App\Models\QuizAttempt;
 use GuzzleHttp\Psr7\Request;
+use App\Models\StudentAnswer;
 use Illuminate\Support\Facades\Auth;
 
 class QuizController extends Controller
 {
+    public function activateUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->update(['type' => 1]);
+        return redirect()->back();
+    }
+
+
+    public function permition()
+    {
+        $users = User::where('type', 0)->get();
+        return view("permition", ['users' => $users]);
+    }
+
+
+
     public function index()
     {
-        $user = Auth::user();
-        $quiz = Quiz::where('attempts_allowed', 1)
-            ->whereDoesntHave('quizAttempts', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
+
+        $quiz = Quiz::where(function ($query) {
+            $query->where('attempts_allowed', 1);
+            $query->orWhere(function ($query) {
+                $query->where('starts_at', '<=', Carbon::now()->addHours(3))
+                    ->where('ends_at', '>=', Carbon::now()->addHours(3));
+            });
+        })->whereNotIn('id', function ($query) {
+            $query->select('quiz_id')
+                ->from('quiz_attempts')
+                ->where('user_id', auth()->user()->id);
+        })
             ->get();
+
+
+
+
+
+
 
         return view('quizzes.quizzes', compact('quiz'));
     }
     public function show(Quiz $quiz)
     {
         $user = Auth::user();
+
+
         if ($user->type) {
             return view('quizzes.edit_quiz', compact('quiz'));
         }
+
         $quiz->questions = $quiz->questions->shuffle();
-        return view('quizzes.show_quiz', compact('quiz'));
+
+        $endsAt = Carbon::parse($quiz['ends_at']);
+        $remainTime = $endsAt->diffInSeconds(Carbon::now()->addHours(3));
+
+
+
+        return view('quizzes.show_quiz', compact('quiz', 'remainTime'));
     }
 
     public function check()
     {
         $user = Auth::user();
         $quiz = Quiz::where('user_id', "$user->id")->get();
+
+
 
         return view('quizzes.quizzes', compact('quiz'));
     }
@@ -57,48 +98,45 @@ class QuizController extends Controller
         $quiz_id = $attributes["quiz_id"];
         $quiz = Quiz::find($quiz_id);
         $questionCount = $quiz->questions()->count();
-        if ($len - 3 == $questionCount) {
-
-            $user_id = $attributes["auth"];
-
-            $studentAttempt->quiz_id = $quiz_id;
-            $studentAttempt->user_id = $user_id;
-            $studentAttempt->score = 0;
-            $studentAttempt->started_at = '2022-01-01 09:00:00';
-            $studentAttempt->ended_at = '2022-01-01 09:30:00';
-            $studentAttempt->save();
 
 
-            for ($i = 0; $i < $len - 3; $i++) {
+        $user_id = $attributes["auth"];
+
+        $studentAttempt->quiz_id = $quiz_id;
+        $studentAttempt->user_id = $user_id;
+        $studentAttempt->score = 0;
+        $studentAttempt->started_at = '2022-01-01 09:00:00';
+        $studentAttempt->ended_at = '2022-01-01 09:30:00';
+        $studentAttempt->save();
+
+
+        for ($i = 0; $i < $len - 3; $i++) {
 
 
 
-                $record = Answer::find($attributes["A" . $i]);
+            $record = Answer::find($attributes["A" . $i]);
 
-                if ($record->is_correct) {
-                    $scour++;
-                }
-                $studentAnswer = new StudentAnswer;
-                $studentAnswer->quiz_attempt_id = $studentAttempt->id;
-                $studentAnswer->question_id = $record->question_id;
-                $studentAnswer->answer_id = $record->id;
-                $studentAnswer->user_id = $user_id;
-                $studentAnswer->save();
+            if ($record->is_correct) {
+                $scour++;
             }
-
-            if ($scour > 0) {
-
-                $change = QuizAttempt::where('id', $studentAttempt->id)->first();
-
-
-                $change->score = $scour;
-                $change->save();
-            }
-
-            return redirect("/home");
-        } else {
-            return back()->with('error', 'you did not answer all questions');
+            $studentAnswer = new StudentAnswer;
+            $studentAnswer->quiz_attempt_id = $studentAttempt->id;
+            $studentAnswer->question_id = $record->question_id;
+            $studentAnswer->answer_id = $record->id;
+            $studentAnswer->user_id = $user_id;
+            $studentAnswer->save();
         }
+
+        if ($scour > 0) {
+
+            $change = QuizAttempt::where('id', $studentAttempt->id)->first();
+
+
+            $change->score = $scour;
+            $change->save();
+        }
+
+        return redirect("/home");
     }
 
     public function create()
@@ -115,6 +153,8 @@ class QuizController extends Controller
         $request = request()->validate([
             'title' => 'required',
             'description' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required'
         ]);
 
         $quiz = new Quiz;
@@ -124,8 +164,8 @@ class QuizController extends Controller
         $quiz->time_limit = 1;
         $quiz->attempts_allowed = 0;
 
-        $quiz->starts_at = "2023-03-11 18:55:50";
-        $quiz->ends_at = "2023-03-11 18:55:55";
+        $quiz->starts_at = $request['start_time'];
+        $quiz->ends_at = $request['end_time'];
         $quiz->save();
 
         return redirect("create/question");

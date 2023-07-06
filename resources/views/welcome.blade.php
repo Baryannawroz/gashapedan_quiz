@@ -1,3 +1,5 @@
 <x-layout>
-    <h1>home</h1>
+  <pre class="font-large" style="font-size: 20px; font ">پەروەردەی نەوەیەک بۆ
+    ئایندەی نەتوەوەیەک
+  </pre>
 </x-layout>

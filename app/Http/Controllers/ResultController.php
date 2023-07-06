@@ -17,19 +17,17 @@ class ResultController extends Controller
     {
         $results = QuizAttempt::latest('quiz_id')->orderByDesc('score')->paginate(30);
 
-    foreach ($results as $value) {
-        $rank=1;
-        foreach ($results as $othervalue) {
-            if ($value->quiz_id == $othervalue->quiz_id & $value->score<$othervalue->score ) {
-               $rank++;
+        foreach ($results as $value) {
+            $rank = 1;
+            foreach ($results as $othervalue) {
+                if ($value->quiz_id == $othervalue->quiz_id & $value->score < $othervalue->score) {
+                    $rank++;
+                }
+                $value->rank = $rank;
             }
-            $value->rank=$rank;
         }
-    }
 
         return view('result.index_result', compact('results'));
-
-
     }
 
     /**
@@ -64,22 +62,25 @@ class ResultController extends Controller
 
         $id = auth()->user()->id;
 
-
-        $results =  QuizAttempt::latest()->select('Quiz_attempts.*')
+        $results = QuizAttempt::latest()
+            ->select('quiz_attempts.*')
             ->join('quizzes', 'quizzes.id', '=', 'quiz_attempts.quiz_id')
             ->join('users', 'users.id', '=', 'quiz_attempts.user_id')
             ->where(function ($query) use ($id) {
-                $query->where('users.id', '=', "$id");
-            })->paginate(30);
+                $query->where('users.id', '=', $id);
+            })
+            ->paginate(30);
+
         foreach ($results as $value) {
             $rank = 1;
             foreach ($results as $othervalue) {
-                if ($value->quiz_id == $othervalue->quiz_id & $value->score < $othervalue->score) {
+                if ($value->quiz_id == $othervalue->quiz_id && $value->score < $othervalue->score) {
                     $rank++;
                 }
-                $value->rank = $rank;
             }
+            $value->rank = $rank;
         }
+
         return view('result.index_result', compact('results'));
     }
 

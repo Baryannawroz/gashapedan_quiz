@@ -21,6 +21,10 @@ class="bg-yellow-400 text-white font-bold uppercase rounded-full px-10 py-2 my-4
   class="bg-yellow-400 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-yellow-500 transition-all duration-300">
   @lang('messages.quiz information')
 </a>
+<a href="permition"
+    class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
+    @lang('messages.permition')
+  </a>
   </div>
 
   @else
@@ -34,6 +38,7 @@ class="bg-yellow-400 text-white font-bold uppercase rounded-full px-10 py-2 my-4
       class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
       @lang('messages.self result')
     </a>
+ 
   </div>
   @endif
 

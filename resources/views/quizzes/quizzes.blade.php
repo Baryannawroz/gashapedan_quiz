@@ -1,6 +1,6 @@
 
 <x-app-layout>
-    
+
 
   @foreach ($quiz as $item)
 <a class="relative flex items-start justify-between rounded-xl border border-gray-100 p-4 shadow-xl sm:p-6 lg:p-8"
@@ -17,23 +17,24 @@
     </div>
 
     @if ((Auth::user()->type)==1)
-        
-    
+
+
     <div class="ml-auto">
         @if ($item->attempts_allowed == 0)
         <form method="POST" action="/quiz/{{ $item->id }}/activate">
             @csrf
-            <button class="text-green-400" type="submit">{{ __("messages.activate Quiz")}}</button>
+
+            <button class="inline-block px-4 py-2 text-white bg-red-500 rounded cursor-pointer" type="submit">{{ __("messages.deactivate Quiz")}}</button>
         </form>
         @else
         <form method="POST" action="/quiz/{{ $item->id }}/deactivate">
             @csrf
-            <button class=" text-red-500" type="submit">{{ __("messages.deactivate Quiz")}}</button>
+            <button class=" inline-block px-4 py-2 text-white bg-green-500 rounded cursor-pointer" type="submit">{{ __("messages.activate Quiz")}}</button>
         </form>
         @endif
     </div>
     @endif
 </a>
 @endforeach
-   
+
 </x-app-layout>

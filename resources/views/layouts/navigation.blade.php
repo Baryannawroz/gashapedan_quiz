@@ -19,7 +19,7 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         @lang('messages.about')
                     </x-nav-link>
-                   
+
 
 
                 </div>
@@ -66,7 +66,7 @@
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
                             <div>@lang('messages.lang') </div>
-                
+
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
@@ -76,10 +76,10 @@
                             </div>
                         </button>
                     </x-slot>
-                
+
                     <x-slot name="content">
                         <x-dropdown-link :href="route('lang.switch', ['locale' => 'kus'])">
-                            سۆرانی 
+                            سۆرانی
                         </x-dropdown-link>
                 <x-dropdown-link :href="route('lang.switch', ['locale' => 'kub'])">
                     بادینی
@@ -90,7 +90,7 @@
                      <x-dropdown-link :href="route('lang.switch', ['locale' => 'en'])">
                         English
                     </x-dropdown-link>
-                        
+
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -117,9 +117,7 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('messages.home') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('messages.home') }}
-            </x-responsive-nav-link>
+            
         </div>
 
         <!-- Responsive Settings Options -->

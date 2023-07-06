@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
@@ -27,23 +28,25 @@ Route::get('/home', function () {
     return view('home');
 })->middleware(['auth', 'verified'])->name('home');
 
-Route::get('/quizzes', [QuizController::class, 'index']);
-Route::get('/quizzes/check', [QuizController::class, 'check']);
-Route::post('quizzes', [QuizController::class, 'store']);
-Route::get('/create/quiz', [QuizController::class, 'create']);
-Route::post('/quiz/{id}/deactivate', [QuizController::class, 'deactivate']);
-Route::post('/quiz/{id}/activate', [QuizController::class, 'activate']);
+Route::get('/quizzes', [QuizController::class, 'index'])->middleware(['auth', 'verified']);
+Route::get('/quizzes/check', [QuizController::class, 'check'])->middleware(['auth', 'verified']);
+Route::post('quizzes', [QuizController::class, 'store'])->middleware(['auth', 'verified']);
+Route::get('/create/quiz', [QuizController::class, 'create'])->middleware(['auth', 'verified']);
+Route::post('/quiz/{id}/deactivate', [QuizController::class, 'deactivate'])->middleware(['auth', 'verified']);
+Route::post('/quiz/{id}/activate', [QuizController::class, 'activate'])->middleware(['auth', 'verified']);
 
 
-Route::get("/create/question", [QuestionController::class, 'create']);
-Route::post("/question/store", [QuestionController::class, 'store'])->name('question.store');
+Route::get("/create/question", [QuestionController::class, 'create'])->middleware(['auth', 'verified']);
+Route::post("/question/store", [QuestionController::class, 'store'])->middleware(['auth', 'verified'])->name('question.store');
 
-Route::get('resultSearch', [ResultController::class, 'show']);
-Route::get('result/Self', [ResultController::class, 'showUser']);
-Route::get('/result', [ResultController::class, 'index']);
-Route::post('/stdAnswer', [quizController::class, "stdAnswer"]);
-Route::get('/quiz/{quiz}/show', [QuizController::class, 'show']);
-Route::get('/edit/question/{question}', [QuestionController::class, 'edit']);
+Route::get('resultSearch', [ResultController::class, 'show'])->middleware(['auth', 'verified']);
+Route::get('result/Self', [ResultController::class, 'showUser'])->middleware(['auth', 'verified']);
+Route::get('/result', [ResultController::class, 'index'])->middleware(['auth', 'verified']);
+Route::post('/stdAnswer', [quizController::class, "stdAnswer"])->middleware(['auth', 'verified']);
+Route::get('/quiz/{quiz}/show', [QuizController::class, 'show'])->middleware(['auth', 'verified']);
+Route::get('/edit/question/{question}', [QuestionController::class, 'edit'])->middleware(['auth', 'verified']);
+Route::get('permition', [QuizController::class, 'permition'])->middleware(['auth', 'verified']);
+Route::post('/activate-user/{id}', [QuizController::class, 'activateUser'])->name('activate-user');
 
 
 
@@ -63,8 +66,8 @@ Route::get('lang/{locale}', function ($locale) {
 
     session(['locale' => $locale, 'expires' => now()->addDay()]);
 
-    
-    if(session()->has('locale')) {
+
+    if (session()->has('locale')) {
         $locale = session('locale');
     } else {
         $locale = 'en';
