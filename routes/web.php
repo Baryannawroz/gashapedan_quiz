@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\report;
+use App\Http\Controllers\reportController;
 use App\Http\Controllers\ResultController;
 use App\Models\Quiz;
 use Illuminate\Support\Facades\App;
@@ -32,27 +34,33 @@ Route::get('/quizzes', [QuizController::class, 'index'])->middleware(['auth', 'v
 Route::get('/quizzes/check', [QuizController::class, 'check'])->middleware(['auth', 'verified']);
 Route::post('quizzes', [QuizController::class, 'store'])->middleware(['auth', 'verified']);
 Route::get('/create/quiz', [QuizController::class, 'create'])->middleware(['auth', 'verified']);
+Route::post('quiz/update', [QuizController::class, 'update'])->middleware(['auth', 'verified']);
 Route::post('/quiz/{id}/deactivate', [QuizController::class, 'deactivate'])->middleware(['auth', 'verified']);
 Route::post('/quiz/{id}/activate', [QuizController::class, 'activate'])->middleware(['auth', 'verified']);
+Route::get('/quiz/{quiz}/show', [QuizController::class, 'show'])->middleware(['auth', 'verified']);
+Route::get('/quiz/{quiz}/edit', [QuizController::class, 'edit'])->middleware(['auth', 'verified']);
+Route::post('/activate-user/{id}', [QuizController::class, 'activateUser'])->name('activate-user');
+Route::get('permition', [QuizController::class, 'permition'])->middleware(['auth', 'verified']);
+Route::post('/stdAnswer', [quizController::class, "stdAnswer"])->middleware(['auth', 'verified']);
 
 
 Route::get("/create/question", [QuestionController::class, 'create'])->middleware(['auth', 'verified']);
 Route::post("/question/store", [QuestionController::class, 'store'])->middleware(['auth', 'verified'])->name('question.store');
+Route::get('/edit/question/{question}', [QuestionController::class, 'edit'])->middleware(['auth', 'verified']);
 
 Route::get('resultSearch', [ResultController::class, 'show'])->middleware(['auth', 'verified']);
 Route::get('result/Self', [ResultController::class, 'showUser'])->middleware(['auth', 'verified']);
 Route::get('/result', [ResultController::class, 'index'])->middleware(['auth', 'verified']);
-Route::post('/stdAnswer', [quizController::class, "stdAnswer"])->middleware(['auth', 'verified']);
-Route::get('/quiz/{quiz}/show', [QuizController::class, 'show'])->middleware(['auth', 'verified']);
-Route::get('/edit/question/{question}', [QuestionController::class, 'edit'])->middleware(['auth', 'verified']);
-Route::get('permition', [QuizController::class, 'permition'])->middleware(['auth', 'verified']);
-Route::post('/activate-user/{id}', [QuizController::class, 'activateUser'])->name('activate-user');
+
+
+Route::get('/reports', [reportController::class, 'index'])->middleware(['auth', 'verified']);
+Route::get('/result_quizname', [reportController::class, 'quizname'])->middleware(['auth', 'verified']);
 
 
 
 
 Route::get('/dashboard', function () {
-    return view('dashboard', ["quiz" => Quiz::all()]);
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 

@@ -59,10 +59,11 @@
     const specificTime = 1000*{{$remainTime}}; // 5 seconds
     // Function to submit the form
     function submitForm() {
-    form.submit();
+        form.submit();
     }
 
     // Delay the form submission
+    if(specificTime>0)
     setTimeout(submitForm, specificTime);
 </script>
     </body>

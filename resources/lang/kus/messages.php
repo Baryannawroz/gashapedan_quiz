@@ -22,5 +22,6 @@ return [
     'Register' => 'خۆتۆمارکردن',
     'Profile' => 'پرۆفایل',
     'permition' => 'ڕێگەپێدان',
+    'report' => 'ڕاپۆرت',
 
 ];

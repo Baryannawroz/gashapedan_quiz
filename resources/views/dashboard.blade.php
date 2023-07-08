@@ -1,13 +1,13 @@
 <x-app-layout>
 
   @if (Auth()->user()->type==1)
-  
+
   <div class="flex flex-col items-center">
   <a href="/create/quiz"
   class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
   @lang('messages.create quiz')
   </a>
-  
+
   <a href="/create/question"
   class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
   @lang('messages.create question')
@@ -25,6 +25,11 @@ class="bg-yellow-400 text-white font-bold uppercase rounded-full px-10 py-2 my-4
     class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
     @lang('messages.permition')
   </a>
+  
+<a href="reports"
+    class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
+    @lang('messages.report')
+  </a>
   </div>
 
   @else
@@ -38,7 +43,7 @@ class="bg-yellow-400 text-white font-bold uppercase rounded-full px-10 py-2 my-4
       class="bg-blue-500 text-white font-bold uppercase rounded-full px-10 py-2 my-4 relative z-10 hover:translate-y-2 hover:shadow-md hover:bg-blue-600 transition-all duration-300">
       @lang('messages.self result')
     </a>
- 
+
   </div>
   @endif
 

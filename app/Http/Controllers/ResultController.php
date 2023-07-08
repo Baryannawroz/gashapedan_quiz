@@ -60,25 +60,23 @@ class ResultController extends Controller
     public function showUser(Request $request)
     {
 
-        $id = auth()->user()->id;
+
 
         $results = QuizAttempt::latest()
             ->select('quiz_attempts.*')
             ->join('quizzes', 'quizzes.id', '=', 'quiz_attempts.quiz_id')
             ->join('users', 'users.id', '=', 'quiz_attempts.user_id')
-            ->where(function ($query) use ($id) {
-                $query->where('users.id', '=', $id);
+            ->where(function ($query)  {
+                $query->where('users.id', '=', auth()->user()->id);
             })
             ->paginate(30);
 
+$quizattepts=QuizAttempt::all();
         foreach ($results as $value) {
-            $rank = 1;
-            foreach ($results as $othervalue) {
-                if ($value->quiz_id == $othervalue->quiz_id && $value->score < $othervalue->score) {
-                    $rank++;
-                }
-            }
-            $value->rank = $rank;
+
+
+   $value->rank = QuizAttempt::where("quiz_id","=",$value->quiz_id)->where("score",">",$value->score)->count()+1;
+
         }
 
         return view('result.index_result', compact('results'));
