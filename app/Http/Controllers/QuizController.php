@@ -39,7 +39,7 @@ class QuizController extends Controller
         $quiz->ends_at = $request['end_time'];
 
         $quiz->save();
-        return redirect("quizzes");
+        return redirect("quizzes/check");
     }
 
 
@@ -58,16 +58,28 @@ class QuizController extends Controller
         $quiz = Quiz::where(function ($query) {
             $query->where('attempts_allowed', 1);
             $query->orWhere(function ($query) {
-                $query->where('starts_at', '<=', Carbon::now()->addHours(3))
-                    ->where('ends_at', '>=', Carbon::now()->addHours(3));
+                $query->where('ends_at', '>=', Carbon::now()->addHours(3));
+                // ->where('starts_at', '<=', Carbon::now()->addHours(3))
             });
         })->whereNotIn('id', function ($query) {
             $query->select('quiz_id')
                 ->from('quiz_attempts')
                 ->where('user_id', auth()->user()->id);
-        })
+        })->orderByDesc('created_at')
             ->get();
+foreach ($quiz as $q) {
 
+    $endTime = Carbon::parse($q['starts_at']);
+    $currentTime = Carbon::now()->addHours(3);
+    $remainTime = $endTime->diffInSeconds($currentTime);
+
+        // Make $remainTime negative if the quiz has ended
+        if ($endTime < $currentTime) {
+            $remainTime = -$remainTime;
+
+        }
+        $q['remainTime']=$remainTime;
+    }
 
 
 
@@ -89,7 +101,7 @@ class QuizController extends Controller
 
 
         if (auth()->user()->type) {
-            return view('quizzes.edit_quiz', compact('quiz'));
+            return view('quizzes.edit_question', compact('quiz'));
         }
         $endTime = Carbon::parse($quiz['ends_at']);
         $currentTime = Carbon::now()->addHours(3);
@@ -99,7 +111,7 @@ class QuizController extends Controller
         if ($endTime < $currentTime) {
             $remainTime = -$remainTime;
         }
-        if ($quiz['attempts_allowed'] || $remainTime > 0) {
+        if ($quiz['attempts_allowed'] || ($remainTime > 0 && $currentTime > Carbon::parse($quiz['starts_at'])) ) {
 
             $quiz->questions = $quiz->questions->shuffle();
             return view('quizzes.show_quiz', compact('quiz', 'remainTime'));

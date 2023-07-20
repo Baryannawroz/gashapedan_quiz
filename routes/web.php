@@ -42,17 +42,12 @@ Route::get('/quiz/{quiz}/edit', [QuizController::class, 'edit'])->middleware(['a
 Route::post('/activate-user/{id}', [QuizController::class, 'activateUser'])->name('activate-user');
 Route::get('permition', [QuizController::class, 'permition'])->middleware(['auth', 'verified']);
 Route::post('/stdAnswer', [quizController::class, "stdAnswer"])->middleware(['auth', 'verified']);
-
-
 Route::get("/create/question", [QuestionController::class, 'create'])->middleware(['auth', 'verified']);
 Route::post("/question/store", [QuestionController::class, 'store'])->middleware(['auth', 'verified'])->name('question.store');
 Route::get('/edit/question/{question}', [QuestionController::class, 'edit'])->middleware(['auth', 'verified']);
-
 Route::get('resultSearch', [ResultController::class, 'show'])->middleware(['auth', 'verified']);
 Route::get('result/Self', [ResultController::class, 'showUser'])->middleware(['auth', 'verified']);
 Route::get('/result', [ResultController::class, 'index'])->middleware(['auth', 'verified']);
-
-
 Route::get('/reports', [reportController::class, 'index'])->middleware(['auth', 'verified']);
 Route::get('/result_quizname', [reportController::class, 'quizname'])->middleware(['auth', 'verified']);
 
